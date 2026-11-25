@@ -1,0 +1,960 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kawaii Dino Phonics World 🦕</title>
+
+<style>
+:root {
+  --pink:#ffb9d0;
+  --purple:#cdbbff;
+  --blue:#b9e8ff;
+  --yellow:#fff0a8;
+  --green:#c9f3d5;
+  --ink:#51465e;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(135deg,#fff0f6,#f0eaff,#e8f8ff);
+  min-height:100vh;
+}
+header {
+  text-align:center;
+  padding:24px 12px 12px;
+}
+h1 {
+  color:#a77bd8;
+  font-size:clamp(27px,5vw,42px);
+  margin:5px;
+}
+.subtitle { color:#88799c; }
+nav {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:9px;
+  padding:10px;
+}
+button,select,input {
+  font:inherit;
+}
+button {
+  border:0;
+  border-radius:18px;
+  padding:12px 18px;
+  background:#d9caff;
+  color:#55466c;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 4px 0 #b9a4e9;
+  transition:.15s;
+}
+button:hover { transform:translateY(-2px); }
+button:active {
+  transform:translateY(2px);
+  box-shadow:0 2px 0 #b9a4e9;
+}
+button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+}
+button.pink { background:#ffc6dc; box-shadow:0 4px 0 #eea3c0; }
+button.blue { background:#c4eaff; box-shadow:0 4px 0 #94cce9; }
+button.green { background:#c9f3d5; box-shadow:0 4px 0 #9bd8ad; }
+button.yellow { background:#fff0a8; box-shadow:0 4px 0 #e8d27d; }
+main {
+  width:min(920px,94%);
+  margin:12px auto 40px;
+}
+.panel {
+  background:rgba(255,255,255,.9);
+  border:3px solid white;
+  border-radius:28px;
+  padding:22px;
+  box-shadow:0 8px 25px #bcaedc30;
+  margin-bottom:18px;
+}
+.center { text-align:center; }
+.hidden { display:none !important; }
+select {
+  padding:12px;
+  border:2px solid #e2d6ff;
+  border-radius:14px;
+  background:white;
+  color:var(--ink);
+}
+.big-dino {
+  font-size:95px;
+  margin:10px;
+  animation:bob 2s infinite ease-in-out;
+}
+@keyframes bob {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-9px); }
+}
+.stats {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:15px 0;
+}
+.stat {
+  background:#fff4c9;
+  padding:10px 16px;
+  border-radius:16px;
+  font-weight:bold;
+}
+.progress {
+  height:13px;
+  background:#eee8fa;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0;
+}
+.progress div {
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#ffb9d0,#c6a9ff);
+  transition:width .3s;
+}
+.question {
+  font-size:clamp(23px,4vw,34px);
+  font-weight:bold;
+  margin:20px 0;
+}
+.prompt {
+  font-size:18px;
+  line-height:1.5;
+  color:#7b6c91;
+}
+.answer-box {
+  background:#fff7fb;
+  border:2px dashed #efb6d0;
+  border-radius:18px;
+  padding:16px;
+  margin:15px auto;
+  max-width:550px;
+}
+input[type="text"] {
+  width:min(100%,400px);
+  padding:14px;
+  border:2px solid #ddcfff;
+  border-radius:14px;
+  font-size:20px;
+  text-align:center;
+}
+.status {
+  min-height:30px;
+  font-weight:bold;
+  margin:12px;
+}
+.options {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin:18px 0;
+}
+.option {
+  min-width:90px;
+  background:#e9e0ff;
+  box-shadow:0 4px 0 #c9b8ee;
+}
+.option.selected {
+  background:#ffc6dc;
+  box-shadow:0 4px 0 #e99fbe;
+  outline:3px solid white;
+}
+.dino-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:13px;
+}
+.dino-card {
+  background:#fff8fc;
+  border:2px solid #f3e2f0;
+  border-radius:20px;
+  padding:10px;
+  text-align:center;
+}
+.dino-card img {
+  width:100%;
+  max-width:135px;
+  display:block;
+  margin:auto;
+}
+.dino-card strong { display:block; }
+.dino-card small { color:#8d7c9e; }
+.locked {
+  filter:grayscale(1);
+  opacity:.45;
+}
+.result-stars {
+  font-size:42px;
+  letter-spacing:5px;
+}
+footer {
+  text-align:center;
+  padding:20px;
+  color:#9b8cae;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>🌸 Kawaii Dino Phonics World 🦕</h1>
+  <div class="subtitle">Learn sounds, spell words and collect adorable dinosaurs!</div>
+</header>
+
+<nav>
+  <button onclick="showPage('home')">🏠 Home</button>
+  <button class="pink" onclick="startExercise(1)">🌷 Exercise 1</button>
+  <button class="blue" onclick="startExercise(2)">🧁 Exercise 2</button>
+  <button class="green" onclick="showPage('collection')">🦖 Dino Collection</button>
+</nav>
+
+<main>
+  <section id="home" class="panel center">
+    <div class="big-dino">🦕</div>
+    <h2>Welcome to Dino Phonics!</h2>
+    <p>Choose your age group and start your daily phonics adventure.</p>
+
+    <p><strong>Choose your age group:</strong></p>
+    <select id="age">
+      <option value="3-5">3–5 years old</option>
+      <option value="6-8" selected>6–8 years old</option>
+      <option value="9-12">9–12 years old</option>
+      <option value="13-17">13–17 years old</option>
+    </select>
+
+    <div class="stats">
+      <div class="stat">⭐ Stars: <span id="homeStars">0</span></div>
+      <div class="stat">🦖 Dinosaurs: <span id="homeDinos">0</span>/20</div>
+    </div>
+
+    <h3>Choose your adventure!</h3>
+    <div class="options">
+      <button class="pink" onclick="startExercise(1)">🌷 Start Exercise 1</button>
+      <button class="blue" onclick="startExercise(2)">🧁 Start Exercise 2</button>
+    </div>
+
+    <p class="prompt">Each exercise has 10 questions. You can play either exercise whenever you like!</p>
+  </section>
+
+  <section id="game" class="panel center hidden">
+    <h2 id="exerciseTitle">Exercise</h2>
+    <div class="stats">
+      <div class="stat">Question <span id="questionNumber">1</span>/10</div>
+      <div class="stat">⭐ Correct: <span id="score">0</span></div>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+
+    <div id="questionType" class="stat">Phonics</div>
+    <div id="questionText" class="question"></div>
+    <div id="questionPrompt" class="prompt"></div>
+
+    <div id="voiceArea" class="answer-box">
+      <div>🎤 Speak your answer clearly!</div>
+      <div class="options">
+        <button class="pink" id="micButton" onclick="startListening()">🎤 Start microphone</button>
+        <button class="blue" onclick="startListening()">🔁 Retry</button>
+      </div>
+      <div id="transcript" class="prompt">Your spoken answer will appear here.</div>
+    </div>
+
+    <div id="spellingArea" class="answer-box hidden">
+      <p>🔊 Listen to the word, then type its spelling.</p>
+      <button class="yellow" onclick="speakSpelling()">🔊 Hear the word</button>
+      <p><input id="spellingInput" type="text" placeholder="Type the word here"></p>
+    </div>
+
+    <div id="feedback" class="status"></div>
+    <div class="options">
+      <button class="green" id="checkButton" onclick="checkAnswer()">Check answer ✓</button>
+      <button class="blue hidden" id="nextButton" onclick="nextQuestion()">Next question ➜</button>
+    </div>
+    <button onclick="showPage('home')">🏠 Back home</button>
+  </section>
+
+  <section id="results" class="panel center hidden">
+    <div class="big-dino">🎉</div>
+    <h2>Exercise completed!</h2>
+    <p>You did a wonderful job!</p>
+    <div class="result-stars" id="earnedStars">⭐⭐⭐</div>
+    <h3 id="resultScore">10 out of 10 correct</h3>
+    <p id="rewardMessage"></p>
+    <div id="rewardDino"></div>
+    <div class="stats">
+      <div class="stat">⭐ Total stars: <span id="resultTotalStars">0</span></div>
+      <div class="stat">🦖 Collected: <span id="resultDinoCount">0</span>/20</div>
+    </div>
+    <div class="options">
+      <button class="pink" onclick="startExercise(1)">Exercise 1 again</button>
+      <button class="blue" onclick="startExercise(2)">Exercise 2 again</button>
+      <button class="green" onclick="showPage('collection')">See my dinosaurs</button>
+    </div>
+  </section>
+
+  <section id="collection" class="panel hidden">
+    <div class="center">
+      <h2>🦖 My Kawaii Dino Collection</h2>
+      <p>Collect 20 stars to unlock one new dinosaur!</p>
+      <div class="stats">
+        <div class="stat">⭐ Stars: <span id="collectionStars">0</span></div>
+        <div class="stat">🦕 Unlocked: <span id="collectionCount">0</span>/20</div>
+      </div>
+    </div>
+    <div id="dinoGrid" class="dino-grid"></div>
+    <div class="center" style="margin-top:20px">
+      <button onclick="showPage('home')">🏠 Back home</button>
+    </div>
+  </section>
+</main>
+
+<footer>Made with 💗 for little phonics explorers!</footer>
+
+<script>
+/* ---------------- SAVE DATA ---------------- */
+
+const STORAGE_KEY = "kawaiiDinoWorld2026";
+
+let saved = {
+  stars:0,
+  unlocked:[]
+};
+
+try {
+  const old = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if(old && typeof old.stars === "number" && Array.isArray(old.unlocked)) {
+    saved = old;
+  }
+} catch(e) {}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(saved));
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById("homeStars").textContent = saved.stars;
+  document.getElementById("homeDinos").textContent = saved.unlocked.length;
+  document.getElementById("collectionStars").textContent = saved.stars;
+  document.getElementById("collectionCount").textContent = saved.unlocked.length;
+}
+
+function showPage(id) {
+  ["home","game","results","collection"].forEach(page => {
+    document.getElementById(page).classList.toggle("hidden",page !== id);
+  });
+  if(id === "collection") renderCollection();
+  updateStats();
+}
+
+/* ---------------- AGE-BASED QUESTIONS ---------------- */
+
+const questionBanks = {
+  "3-5": {
+    phonics:[
+      ["PR","prize",["pr","p r","per","prize"]],
+      ["BR","brown",["br","b r","ber","brown"]],
+      ["TR","tree",["tr","t r","ter","tree"]],
+      ["CR","crab",["cr","c r","ker","crab"]],
+      ["FL","flag",["fl","f l","flag"]],
+      ["DR","drum",["dr","d r","drum"]]
+    ],
+    vowels:[
+      ["A","A",["a","ay"]],
+      ["E","E",["e","ee"]]
+    ],
+    sentences:[
+      ["The cat is big.",["the cat is big","the cat big"]],
+      ["I like my dog.",["i like my dog","i like dog"]]
+    ],
+    spelling:["cat","sun","dog","hat","pig","bed","cup","map","fox","pen"]
+  },
+
+  "6-8": {
+    phonics:[
+      ["SH","ship",["sh","ship"]],
+      ["CH","chair",["ch","chair"]],
+      ["TH","thumb",["th","thumb"]],
+      ["PR","prize",["pr","p r","prize"]],
+      ["BR","brown",["br","b r","brown"]],
+      ["TR","train",["tr","t r","train"]]
+    ],
+    vowels:[
+      ["A","A",["a","ay"]],
+      ["O","O",["o","oh"]]
+    ],
+    sentences:[
+      ["The little bird can fly.",["the little bird can fly","little bird can fly"]],
+      ["I love reading books.",["i love reading books","i love to read books"]]
+    ],
+    spelling:["rabbit","flower","garden","window","pencil","planet","basket","sunset","purple","kitten"]
+  },
+
+  "9-12": {
+    phonics:[
+      ["STR","string",["str","string"]],
+      ["SPL","splash",["spl","splash"]],
+      ["SCR","screen",["scr","screen"]],
+      ["TH","think",["th","think"]],
+      ["SH","shiny",["sh","shiny"]],
+      ["CH","cheese",["ch","cheese"]]
+    ],
+    vowels:[
+      ["I","I",["i","eye"]],
+      ["U","U",["u","you"]]
+    ],
+    sentences:[
+      ["The clever fox crossed the bridge.",["the clever fox crossed the bridge","the fox crossed the bridge"]],
+      ["We explored the beautiful garden.",["we explored the beautiful garden","we explore the beautiful garden"]]
+    ],
+    spelling:["adventure","discovery","beautiful","butterfly","triangle","important","chocolate","wonderful","library","mysterious"]
+  },
+
+  "13-17": {
+    phonics:[
+      ["STR","strong",["str","strong"]],
+      ["SPL","splendid",["spl","splendid"]],
+      ["SCR","scramble",["scr","scramble"]],
+      ["TH","thoughtful",["th","thoughtful"]],
+      ["SH","shimmer",["sh","shimmer"]],
+      ["CH","character",["ch","character"]]
+    ],
+    vowels:[
+      ["A","A",["a","ay"]],
+      ["E","E",["e","ee"]]
+    ],
+    sentences:[
+      ["The scientist carefully examined the experiment.",["the scientist carefully examined the experiment","the scientist examined the experiment"]],
+      ["Learning new skills can open exciting opportunities.",["learning new skills can open exciting opportunities","learning new skills opens opportunities"]]
+    ],
+    spelling:["communication","imagination","environment","responsibility","extraordinary","knowledge","independent","opportunity","achievement","pronunciation"]
+  }
+};
+
+/* ---------------- DINOSAUR COLLECTION ---------------- */
+
+const dinosaurData = [
+  ["Mochi","Magical","#ffc3df","unicorn"],
+  ["Starry","Magical","#c8bdff","stego"],
+  ["Bubbles","Magical","#aee9ff","round"],
+  ["Peaches","Magical","#ffd0b4","triceratops"],
+  ["Twinkle","Magical","#d7c5ff","ptero"],
+  ["Sprinkles","Magical","#ffb9d0","longneck"],
+  ["Moonbeam","Magical","#c9f3d5","spino"],
+  ["Cupcake","Magical","#ffe6a8","duckbill"],
+  ["Cloudy","Magical","#bfe9f7","ankylosaurus"],
+  ["Jellybean","Magical","#e8c8ff","raptor"],
+
+  ["Pudding","Normal","#f7c6d9","round"],
+  ["Clover","Normal","#bfe8c8","stego"],
+  ["Waffles","Normal","#ffe0a8","triceratops"],
+  ["Daisy","Normal","#c9e5ff","longneck"],
+  ["Muffin","Normal","#e7c9ff","duckbill"],
+  ["Poppy","Normal","#ffc4ce","ptero"],
+  ["Nibbles","Normal","#d3f0dd","ankylosaurus"],
+
+  ["Pebble","Silly","#d5d0e8","tiny"],
+  ["Pickles","Silly","#d0e9a8","round"],
+  ["Noodle","Silly","#ffe0b7","duckbill"]
+];
+
+function dinosaurSVG(kind,color) {
+  let feature = "";
+
+  if(kind==="unicorn") {
+    feature = `
+      <path d="M105 61 L111 26 L124 59" fill="#ffe7a4" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M55 100 Q30 70 47 58 Q60 57 65 78" fill="#ffc1df" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M62 81 Q34 73 37 53" fill="none" stroke="#c79cff" stroke-width="7"/>
+    `;
+  } else if(kind==="stego") {
+    feature = `
+      <path d="M48 99 L43 79 L59 83 L65 61 L79 80 L91 55 L104 80 L119 65 L123 98Z" fill="#b6a5ef" stroke="#9d7cba" stroke-width="3"/>
+    `;
+  } else if(kind==="ptero") {
+    feature = `
+      <path d="M53 105 Q13 50 15 34 Q49 48 75 88Z" fill="#ffb6d1" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M108 91 Q132 43 153 34 Q147 76 124 109Z" fill="#ffb6d1" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M99 44 L113 17 L123 48" fill="#ffc4dc" stroke="#9d7cba" stroke-width="3"/>
+    `;
+  } else if(kind==="triceratops") {
+    feature = `
+      <path d="M83 59 L72 27 L96 54" fill="#ffe5a8" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M112 58 L132 29 L124 70" fill="#ffe5a8" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M78 92 Q99 70 130 94 Q123 120 92 117Z" fill="#ffd2e3" stroke="#9d7cba" stroke-width="3"/>
+    `;
+  } else if(kind==="longneck") {
+    feature = `
+      <path d="M93 88 Q82 51 95 24 Q103 8 119 26 L115 88" fill="${color}" stroke="#9d7cba" stroke-width="4"/>
+      <circle cx="112" cy="25" r="17" fill="${color}" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M116 17 Q126 10 132 18" fill="none" stroke="#9d7cba" stroke-width="3"/>
+    `;
+  } else if(kind==="spino") {
+    feature = `
+      <path d="M49 94 L53 55 L66 69 L78 37 L91 67 L105 35 L116 71 L130 54 L132 100Z" fill="#ffb6c9" stroke="#9d7cba" stroke-width="3"/>
+    `;
+  } else if(kind==="duckbill") {
+    feature = `
+      <path d="M112 83 Q151 76 153 91 Q143 109 112 105Z" fill="#ffcc9f" stroke="#9d7cba" stroke-width="3"/>
+      <path d="M43 104 Q27 111 29 123" fill="none" stroke="#9d7cba" stroke-width="4" stroke-linecap="round"/>
+    `;
+  } else if(kind==="ankylosaurus") {
+    feature = `
+      <circle cx="51" cy="105" r="12" fill="#c6b2ee" stroke="#9d7cba" stroke-width="3"/>
+      <circle cx="71" cy="117" r="8" fill="#c6b2ee"/>
+      <path d="M130 99 Q149 93 145 113" fill="none" stroke="#9d7cba" stroke-width="6" stroke-linecap="round"/>
+    `;
+  } else if(kind==="raptor") {
+    feature = `
+      <path d="M48 104 Q20 89 23 69 Q43 74 60 93" fill="none" stroke="#9d7cba" stroke-width="7" stroke-linecap="round"/>
+      <path d="M126 108 L137 116 L127 117" fill="none" stroke="#9d7cba" stroke-width="3"/>
+    `;
+  } else if(kind==="tiny") {
+    feature = `
+      <circle cx="68" cy="66" r="9" fill="#fff0a8"/>
+      <circle cx="115" cy="65" r="8" fill="#fff0a8"/>
+      <path d="M85 117 L81 128 M108 117 L113 128" stroke="#9d7cba" stroke-width="4" stroke-linecap="round"/>
+    `;
+  } else {
+    feature = `
+      <path d="M47 107 Q26 92 30 76 Q50 81 61 99" fill="none" stroke="#9d7cba" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="115" cy="45" r="7" fill="#fff0a8"/>
+    `;
+  }
+
+  return `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 155">
+    <ellipse cx="88" cy="136" rx="48" ry="8" fill="#e9deee"/>
+    ${feature}
+    <ellipse cx="87" cy="103" rx="48" ry="34" fill="${color}" stroke="#9d7cba" stroke-width="3"/>
+    <circle cx="109" cy="73" r="36" fill="${color}" stroke="#9d7cba" stroke-width="3"/>
+    <ellipse cx="126" cy="88" rx="19" ry="13" fill="#ffe0e8"/>
+    <ellipse cx="96" cy="69" rx="7" ry="10" fill="#51465e"/>
+    <ellipse cx="121" cy="69" rx="7" ry="10" fill="#51465e"/>
+    <circle cx="98" cy="65" r="2.5" fill="white"/>
+    <circle cx="123" cy="65" r="2.5" fill="white"/>
+    <ellipse cx="83" cy="87" rx="9" ry="5" fill="#ff9dbb" opacity=".8"/>
+    <ellipse cx="132" cy="87" rx="9" ry="5" fill="#ff9dbb" opacity=".8"/>
+    <path d="M108 91 Q116 99 125 91" fill="none" stroke="#8d617e" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M57 128 L52 137 M75 133 L75 139 M104 133 L107 139" stroke="#9d7cba" stroke-width="4" stroke-linecap="round"/>
+    <path d="M39 48 L43 40 L47 48 L55 51 L47 54 L43 62 L39 54 L31 51Z" fill="#ffe78e"/>
+    <circle cx="145" cy="35" r="4" fill="#ffb9d0"/>
+  </svg>`;
+}
+
+function dinosaurImage(index) {
+  const d = dinosaurData[index];
+  const svg = dinosaurSVG(d[3],d[2]);
+  return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg);
+}
+
+/* ---------------- COLLECTION DISPLAY ---------------- */
+
+function renderCollection() {
+  const grid = document.getElementById("dinoGrid");
+  grid.innerHTML = "";
+
+  dinosaurData.forEach((d,index) => {
+    const unlocked = saved.unlocked.includes(index);
+    const card = document.createElement("div");
+    card.className = "dino-card"+(unlocked ? "" : " locked");
+
+    const img = document.createElement("img");
+    img.src = dinosaurImage(index);
+    img.alt = d[0];
+
+    const name = document.createElement("strong");
+    name.textContent = unlocked ? "🦕 "+d[0] : "🔒 Mystery Dino";
+
+    const type = document.createElement("small");
+    type.textContent = unlocked ? d[1]+" Dino" : "Earn more stars to unlock";
+
+    card.append(img,name,type);
+    grid.appendChild(card);
+  });
+}
+
+/* ---------------- GAME LOGIC ---------------- */
+
+let exercise = 1;
+let questions = [];
+let current = 0;
+let score = 0;
+let selectedAnswer = "";
+let transcriptAnswer = "";
+let recognition = null;
+let listening = false;
+let questionLocked = false;
+let finishing = false;
+
+function shuffle(array) {
+  return [...array].sort(() => Math.random()-.5);
+}
+
+function buildQuestions(age,exerciseNumber) {
+  const bank = questionBanks[age];
+  const phonics = shuffle(bank.phonics);
+  const vowels = shuffle(bank.vowels);
+  const sentences = shuffle(bank.sentences);
+  const spelling = shuffle(bank.spelling);
+
+  const chosenPhonics = phonics.slice((exerciseNumber-1)*3,(exerciseNumber-1)*3+3);
+  const chosenVowels = vowels.slice((exerciseNumber-1)*2,(exerciseNumber-1)*2+2);
+
+  const chosenSentences = sentences.slice((exerciseNumber-1)*2,(exerciseNumber-1)*2+2);
+  const chosenSpelling = spelling.slice((exerciseNumber-1)*3,(exerciseNumber-1)*3+3);
+
+  const result = [];
+
+  chosenPhonics.forEach(q => result.push({
+    type:"Phonics",
+    title:"Say the sound: "+q[0],
+    prompt:"Say the combined sound aloud. For example, "+q[1]+".",
+    answer:q[0].toLowerCase(),
+    aliases:q[2],
+    spoken:q[1]
+  }));
+
+  chosenVowels.forEach(q => result.push({
+    type:"Vowels",
+    title:"Say the vowel "+q[0],
+    prompt:"Say the vowel sound clearly.",
+    answer:q[1].toLowerCase(),
+    aliases:q[2],
+    spoken:q[0]
+  }));
+
+  chosenSentences.forEach(q => result.push({
+    type:"Sentence",
+    title:"Say this sentence",
+    prompt:q[0],
+    answer:q[0].toLowerCase(),
+    aliases:q[1],
+    spoken:q[0]
+  }));
+
+  chosenSpelling.forEach(word => result.push({
+    type:"Spelling",
+    title:"Spell the word!",
+    prompt:"Listen carefully and type the word.",
+    answer:word.toLowerCase(),
+    spoken:word
+  }));
+
+  return result;
+}
+
+function startExercise(number) {
+  stopListening();
+  exercise = number;
+  current = 0;
+  score = 0;
+  finishing = false;
+  questionLocked = false;
+
+  const age = document.getElementById("age").value;
+  questions = buildQuestions(age,number);
+
+  if(questions.length !== 10) {
+    alert("There was a problem creating the questions. Please refresh the page.");
+    return;
+  }
+
+  document.getElementById("exerciseTitle").textContent = "Exercise "+number+" 🌸";
+  document.getElementById("score").textContent = "0";
+  showPage("game");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if(current >= 10) {
+    finishExercise();
+    return;
+  }
+
+  stopListening();
+  questionLocked = false;
+  selectedAnswer = "";
+  transcriptAnswer = "";
+
+  const q = questions[current];
+
+  document.getElementById("questionNumber").textContent = current+1;
+  document.getElementById("progressBar").style.width = (current/10*100)+"%";
+  document.getElementById("questionType").textContent = q.type;
+  document.getElementById("questionText").textContent = q.title;
+  document.getElementById("questionPrompt").textContent = q.prompt;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("transcript").textContent = "Your spoken answer will appear here.";
+  document.getElementById("nextButton").classList.add("hidden");
+  document.getElementById("checkButton").classList.remove("hidden");
+
+  const spelling = q.type === "Spelling";
+  document.getElementById("voiceArea").classList.toggle("hidden",spelling);
+  document.getElementById("spellingArea").classList.toggle("hidden",!spelling);
+
+  document.getElementById("spellingInput").value = "";
+
+  if(spelling) {
+    setTimeout(speakSpelling,300);
+  }
+}
+
+function speakSpelling() {
+  const q = questions[current];
+  if(!q || q.type !== "Spelling") return;
+  if(!("speechSynthesis" in window)) {
+    document.getElementById("feedback").textContent = "Your browser does not support speech playback.";
+    return;
+  }
+  speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(q.spoken);
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
+
+/* ---------------- MICROPHONE ---------------- */
+
+function startListening() {
+  if(questionLocked) return;
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition) {
+    document.getElementById("feedback").textContent =
+      "Your browser does not support speech recognition. Please try Google Chrome.";
+    return;
+  }
+
+  stopListening();
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-SG";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 5;
+
+  document.getElementById("feedback").textContent = "🎤 Listening... Speak now!";
+  document.getElementById("micButton").textContent = "🎤 Listening...";
+
+  recognition.onresult = function(event) {
+    const q = questions[current];
+    const alternatives = [];
+
+    for(let i=0;i<event.results[0].length;i++) {
+      alternatives.push(event.results[0][i].transcript);
+    }
+
+    transcriptAnswer = alternatives.join(" ");
+    document.getElementById("transcript").textContent =
+      "I heard: "+transcriptAnswer;
+    document.getElementById("feedback").textContent =
+      "Great! Press Check answer when you are ready.";
+    document.getElementById("micButton").textContent = "🎤 Start microphone";
+
+    recognition._alternatives = alternatives;
+  };
+
+  recognition.onerror = function(event) {
+    document.getElementById("feedback").textContent =
+      event.error === "not-allowed"
+      ? "Please allow microphone access in your browser settings."
+      : "I could not hear that clearly. Please try again!";
+    document.getElementById("micButton").textContent = "🎤 Start microphone";
+  };
+
+  recognition.onend = function() {
+    listening = false;
+    document.getElementById("micButton").textContent = "🎤 Start microphone";
+  };
+
+  listening = true;
+  try {
+    recognition.start();
+  } catch(e) {
+    document.getElementById("feedback").textContent = "Please wait a moment and try again.";
+  }
+}
+
+function stopListening() {
+  if(recognition) {
+    try { recognition.stop(); } catch(e) {}
+  }
+  listening = false;
+}
+
+/* ---------------- CHECK ANSWERS ---------------- */
+
+function normalize(text) {
+  return (text || "")
+    .toLowerCase()
+    .replace(/[.,!?;:'"]/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function similarity(a,b) {
+  a = normalize(a);
+  b = normalize(b);
+  if(a === b) return 1;
+  if(!a || !b) return 0;
+
+  const wordsA = a.split(" ");
+  const wordsB = b.split(" ");
+  const matches = wordsA.filter(word => wordsB.includes(word)).length;
+  return matches / Math.max(wordsA.length,wordsB.length);
+}
+
+function checkAnswer() {
+  if(questionLocked) return;
+
+  const q = questions[current];
+  let correct = false;
+
+  if(q.type === "Spelling") {
+    const typed = normalize(document.getElementById("spellingInput").value);
+    correct = typed === q.answer;
+  } else {
+    const alternatives = recognition && recognition._alternatives
+      ? recognition._alternatives
+      : [transcriptAnswer];
+
+    const heard = alternatives.map(normalize).filter(Boolean);
+    const accepted = (q.aliases || [q.answer]).map(normalize);
+
+    if(q.type === "Sentence") {
+      correct = heard.some(h =>
+        accepted.some(a => similarity(h,a) >= 0.7)
+      );
+    } else {
+      correct = heard.some(h =>
+        accepted.some(a => h === a || h.includes(a) || a.includes(h))
+      );
+    }
+  }
+
+  questionLocked = true;
+  stopListening();
+
+  const feedback = document.getElementById("feedback");
+
+  if(correct) {
+    score++;
+    document.getElementById("score").textContent = score;
+    feedback.textContent = "🌟 Correct! Amazing job!";
+    feedback.style.color = "#42a66b";
+  } else {
+    feedback.textContent = "💗 Good try! The answer was: "+q.answer.toUpperCase();
+    feedback.style.color = "#bd789a";
+  }
+
+  document.getElementById("checkButton").classList.add("hidden");
+  document.getElementById("nextButton").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  if(!questionLocked) return;
+  current++;
+  if(current >= 10) {
+    finishExercise();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ---------------- STARS AND REWARDS ---------------- */
+
+function finishExercise() {
+  if(finishing) return;
+  finishing = true;
+  stopListening();
+
+  const earned = score >= 10 ? 3 :
+                 score === 9 ? 2 :
+                 score === 8 ? 1 : 0;
+
+  saved.stars += earned;
+
+  const percentage = score * 10;
+  const type = percentage >= 90 ? "Magical" :
+               percentage >= 61 ? "Normal" : "Silly";
+
+  let newDino = null;
+
+  while(saved.stars >= (saved.unlocked.length+1)*20 &&
+        saved.unlocked.length < 20) {
+    let index = dinosaurData.findIndex((d,i) =>
+      d[1] === type && !saved.unlocked.includes(i)
+    );
+
+    if(index === -1) {
+      index = dinosaurData.findIndex((d,i) =>
+        !saved.unlocked.includes(i)
+      );
+    }
+
+    if(index !== -1) {
+      saved.unlocked.push(index);
+      newDino = index;
+    } else {
+      break;
+    }
+  }
+
+  saveData();
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("earnedStars").textContent =
+    "⭐".repeat(earned) || "💗";
+
+  document.getElementById("resultScore").textContent =
+    score+" out of 10 correct";
+
+  let message = "You earned "+earned+" star"+(earned===1?"":"s")+"! ";
+
+  if(newDino !== null) {
+    message += "You unlocked a new "+type+" dinosaur! 🎉";
+    const d = dinosaurData[newDino];
+    document.getElementById("rewardDino").innerHTML =
+      `<h3>Meet ${d[0]}!</h3>`;
+    const img = document.createElement("img");
+    img.src = dinosaurImage(newDino);
+    img.alt = d[0];
+    img.style.width = "180px";
+    document.getElementById("rewardDino").appendChild(img);
+  } else if(saved.unlocked.length < 20) {
+    const nextTarget = (saved.unlocked.length+1)*20;
+    const remaining = Math.max(0,nextTarget-saved.stars);
+    message += remaining+" more star"+(remaining===1?"":"s")+" until your next dinosaur!";
+    document.getElementById("rewardDino").innerHTML = "";
+  } else {
+    message += "You collected all 20 dinosaurs! Amazing!";
+    document.getElementById("rewardDino").innerHTML = "🏆🦖🏆";
+  }
+
+  document.getElementById("rewardMessage").textContent = message;
+  document.getElementById("resultTotalStars").textContent = saved.stars;
+  document.getElementById("resultDinoCount").textContent = saved.unlocked.length;
+
+  showPage("results");
+}
+
+/* ---------------- START ---------------- */
+
+updateStats();
+renderCollection();
+showPage("home");
+</script>
+</body>
+</html>
+
